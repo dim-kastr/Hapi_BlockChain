@@ -1,7 +1,7 @@
 {
   "name": "hapi-starter-kit",
   "version": "1.0.1",
-  "description": "",
+  "description": "`GET` - используем только query (ex: `/api/projects?offset=10&limit=8&order=asc`) (получение информации).\r В случае каких-то сложных json объектов `strinfgify()` и `encode()`",
   "main": "index.js",
   "scripts": {
     "start": "nodemon -e ts  --exec \"npm run compile\"",
@@ -66,5 +66,14 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-standard": "^4.0.1"
-  }
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://bitbucket.org/starterkitcs/starter-kit.git"
+  },
+  "homepage": "https://bitbucket.org/starterkitcs/starter-kit#readme"
 }

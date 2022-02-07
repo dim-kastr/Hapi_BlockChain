@@ -1,24 +1,10 @@
 import * as Hapi from '@hapi/hapi';
-import * as Nes from '@hapi/nes';
-import * as Inert from '@hapi/inert';
-import * as Vision from '@hapi/vision';
 import * as Pino from 'hapi-pino';
-import * as Basic from '@hapi/basic';
-import * as HapiCors from 'hapi-cors';
-import * as HapiBearer from 'hapi-auth-bearer-token';
-import * as HapiPulse from 'hapi-pulse';
 import * as Qs from 'qs';
-import routes from './routes';
 import config from './config/config';
-import {handleValidationError, responseHandler,} from './utils';
-import SwaggerOptions from './config/swagger';
-import {pinoConfig,} from './config/pino';
-import {tokenValidate} from "./utils/auth";
+import { handleValidationError } from './utils';
+import { pinoConfig, } from './config/pino';
 
-const HapiSwagger = require('hapi-swagger');
-const Package = require('../../package.json');
-
-SwaggerOptions.info.version = Package.version;
 
 const init = async () => {
     const server = await new Hapi.Server({
@@ -30,7 +16,6 @@ const init = async () => {
         routes: {
             validate: {
                 options: {
-                    // Handle all validation errors
                     abortEarly: false,
                 },
                 failAction: handleValidationError,
@@ -43,40 +28,9 @@ const init = async () => {
     server.realm.modifiers.route.prefix = '/api';
     // Регистрируем расширения
     await server.register([
-        Basic,
-        Nes,
-        Inert,
-        Vision,
-        HapiBearer,
-        {plugin: Pino, options: pinoConfig(false),},
-        {plugin: HapiSwagger, options: SwaggerOptions,},
-        {
-            plugin: HapiPulse,
-            options: {
-                timeout: 15000,
-                signals: ['SIGINT'],
-            },
-        },
-        {
-            plugin: HapiCors,
-            options: config.cors,
-        }
+        { plugin: Pino, options: pinoConfig(false), },
     ]);
 
-    // JWT Auth
-    server.auth.strategy('jwt-access', 'bearer-access-token', {
-        validate: tokenValidate('access'),
-    });
-    server.auth.strategy('jwt-refresh', 'bearer-access-token', {
-        validate: tokenValidate('refresh'),
-    });
-    server.auth.default('jwt-access');
-
-    // Загружаем маршруты
-    server.route(routes);
-    // Error handler
-    server.ext('onPreResponse', responseHandler);
-    // Enable CORS (Do it last required!)
     // Запускаем сервер
     try {
         await server.start();
@@ -88,4 +42,4 @@ const init = async () => {
     return server;
 };
 
-export {init,};
+export { init };
