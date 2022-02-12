@@ -4,6 +4,13 @@ import * as Qs from 'qs';
 import config from './config/config';
 import { handleValidationError } from './utils';
 import { pinoConfig, } from './config/pino';
+// import routes from './routes';
+import { dbInit } from './models';
+import {
+    readingContractEventsDeposit,
+    readingContractEventsWithdraw,
+    recordingAllEvents
+} from './utils/blockchain';
 
 
 const init = async () => {
@@ -30,6 +37,15 @@ const init = async () => {
     await server.register([
         { plugin: Pino, options: pinoConfig(false), },
     ]);
+
+    await dbInit();
+
+    await readingContractEventsDeposit();
+    await readingContractEventsWithdraw();
+    await recordingAllEvents('Deposit');
+    await recordingAllEvents('Withdraw');
+
+    // server.route(routes);
 
     // Запускаем сервер
     try {
