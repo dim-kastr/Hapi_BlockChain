@@ -50,6 +50,7 @@ export const readingContractEventsDeposit = async () => {
 
         for (let event of events) {
             const { addressOwner, amount, addressToken } = event.returnValues
+            const amountWallet = Web3.utils.fromWei(amount, 'ether')
 
             let user = await User.findOne({
                 where: {
@@ -72,12 +73,12 @@ export const readingContractEventsDeposit = async () => {
             if (!user.wallets || !user.wallets.length) {
                 await Wallet.createWallet({
                     userId: user.id,
-                    amount,
+                    amount: amountWallet,
                     addressToken
                 })
             } else {
                 let balanceFullWallet = new BigNumber(user.wallets[0].amount);
-                let amountEvent = new BigNumber(amount);
+                let amountEvent = new BigNumber(amountWallet);
                 await user.wallets[0].update({
                     amount: +balanceFullWallet + +amountEvent
                 })
@@ -96,6 +97,7 @@ export const readingContractEventsWithdraw = async () => {
 
         for (let event of events) {
             const { account, amount, token } = event.returnValues
+            const amountWallet = Web3.utils.fromWei(amount, 'ether')
 
             const user = await User.findOne({
                 where: {
@@ -111,7 +113,7 @@ export const readingContractEventsWithdraw = async () => {
             })
 
             let balanceFullWallet = new BigNumber(wallet.amount);
-            let amountEvent = new BigNumber(amount);
+            let amountEvent = new BigNumber(amountWallet);
             wallet.update({
                 amount: +balanceFullWallet - +amountEvent
             })
@@ -129,10 +131,11 @@ export const recordingAllEvents = async (type: string) => {
 
         for (let event of events) {
             const { account, amount, token, addressOwner, addressToken } = event.returnValues
+            const amountWallet = Web3.utils.fromWei(amount, 'ether')
             await Transaction.createTransaction({
                 idTransaction: event.id,
                 addressOwner: (event.event === 'Deposit') ? addressOwner : account,
-                amount,
+                amount: amountWallet,
                 addressToken: (event.event === "Deposit") ? addressToken : token,
                 event: event.event
             })
