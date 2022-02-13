@@ -3,8 +3,8 @@ import * as Pino from 'hapi-pino';
 import * as Qs from 'qs';
 import config from './config/config';
 import { handleValidationError } from './utils';
-import { pinoConfig, } from './config/pino';
-// import routes from './routes';
+import { pinoConfig } from './config/pino';
+import routes from './routes';
 import { dbInit } from './models';
 import {
     readingContractEventsDeposit,
@@ -45,7 +45,7 @@ const init = async () => {
     await recordingAllEvents('Deposit');
     await recordingAllEvents('Withdraw');
 
-    // server.route(routes);
+    server.route(routes);
 
     // Запускаем сервер
     try {
