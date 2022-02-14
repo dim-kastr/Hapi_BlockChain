@@ -29,7 +29,6 @@ build/
 
 package-lock.json
 tsconfig.json
-README.md
 package.json
 LICENSE
 env.example

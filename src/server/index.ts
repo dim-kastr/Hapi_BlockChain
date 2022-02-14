@@ -6,7 +6,7 @@ import { handleValidationError } from './utils';
 import { pinoConfig } from './config/pino';
 import routes from './routes';
 import { dbInit } from './models';
-import { readingContractEvents } from './utils/blockchain';
+// import { readingContractEvents } from './utils/blockchain';
 
 
 
@@ -37,7 +37,7 @@ const init = async () => {
 
     await dbInit();
 
-    await readingContractEvents();
+    // await readingContractEvents();
 
     server.route(routes);
 

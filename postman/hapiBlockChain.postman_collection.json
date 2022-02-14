@@ -1,0 +1,114 @@
+{
+	"info": {
+		"_postman_id": "9ff16f2c-09ed-42f8-89af-a4c0741b4eb0",
+		"name": "hapiBlockChain",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "call Approve",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"tokenAddress\": \"0x7bF5fa9C605BF63a21C6Cb87fDEaB6A4135Ce4Ad\",\r\n    \"amount\": \"10000000000000000000\",\r\n    \"userPrivateKey\": \"e3124036fa46f3b5aebff4e20747ff7ecdcce2cdfcf5edfa2c83cccb1a43580b\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/contract/approve",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"contract",
+						"approve"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "call Deposit",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/contract/deposit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"contract",
+						"deposit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "call Withdraw",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/contract/withdraw",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"contract",
+						"withdraw"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list Tokens",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "info Tokens",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "amount",
+			"value": ""
+		},
+		{
+			"key": "addressToken",
+			"value": ""
+		}
+	]
+}
