@@ -11,9 +11,9 @@ export const createProvider = async () => {
         "https://rinkeby.infura.io/v3/dd487bf43f634709939df4ba1f8d4635"
     );
 
-    const WEB3 = new Web3(provider)
+    const web3 = new Web3(provider)
 
-    return WEB3
+    return web3
 }
 
 export const createAccount = async () => {
@@ -26,23 +26,24 @@ export const createAccount = async () => {
     return access
 }
 
-export const createContract = async () => {
+export const createContractAbi = async () => {
 
     const web3 = await createProvider();
     const account = await createAccount();
 
-    const myContract = new web3.eth.Contract(
+    const abiContract = new web3.eth.Contract(
         ContractAbi,
         process.env.CONTRACT_ADDRESS,
         { from: account.address }
     );
 
-    return myContract
+    return abiContract
 }
+
 
 export const readingContractEventsDeposit = async () => {
     try {
-        const contract = await createContract();
+        const contract = await createContractAbi();
         const events = await contract.getPastEvents('Deposit', {
             fromBlock: 0,
             toBlock: 'latest',
@@ -77,7 +78,6 @@ export const readingContractEventsDeposit = async () => {
                     addressToken
                 })
             } else {
-
                 let balanceFullWallet = new BigNumber(user.wallets[0].amount);
                 let amountEvent = new BigNumber(amountWallet);
                 await user.wallets[0].update({
@@ -90,7 +90,7 @@ export const readingContractEventsDeposit = async () => {
 
 export const readingContractEventsWithdraw = async () => {
     try {
-        const contract = await createContract();
+        const contract = await createContractAbi();
         const events = await contract.getPastEvents('Withdraw', {
             fromBlock: 0,
             toBlock: 'latest',
@@ -113,18 +113,20 @@ export const readingContractEventsWithdraw = async () => {
                 }
             })
 
-            let balanceFullWallet = new BigNumber(wallet.amount);
-            let amountEvent = new BigNumber(amountWallet);
-            wallet.update({
-                amount: +balanceFullWallet - +amountEvent
-            })
+            if (wallet) {
+                let balanceFullWallet = new BigNumber(wallet.amount);
+                let amountEvent = new BigNumber(amountWallet);
+                wallet.update({
+                    amount: +balanceFullWallet - +amountEvent
+                })
+            }
         }
     } catch (e) { console.log(e) }
 }
 
 export const recordingAllEvents = async (type: string) => {
     try {
-        const contract = await createContract();
+        const contract = await createContractAbi();
         const events = await contract.getPastEvents(type, {
             fromBlock: 0,
             toBlock: 'latest',
