@@ -3,6 +3,7 @@ import { User } from '../models/User';
 import { Wallet } from '../models/Wallet';
 import { BigNumber } from "bignumber.js";
 import { Transaction } from '../models/Transactions';
+import { output } from '.';
 
 const Web3 = require("web3");
 
@@ -145,5 +146,23 @@ export const recordingAllEvents = async (type: string) => {
             })
         }
 
+    } catch (e) { console.log(e) }
+}
+
+export const getListTokens = async () => {
+    try {
+        const web3 = await createProvider();
+
+        const account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY_ACCOUNT);
+
+        const abiContract = new web3.eth.Contract(
+            ContractAbi,
+            process.env.CONTRACT_ADDRESS,
+            { from: account.address }
+        );
+
+        const listTokens = await abiContract.methods.getListTokens().call()
+
+        return output({ listTokens })
     } catch (e) { console.log(e) }
 }
