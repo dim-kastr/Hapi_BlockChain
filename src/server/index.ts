@@ -4,6 +4,9 @@ import * as Qs from 'qs';
 import config from './config/config';
 import { handleValidationError } from './utils';
 import { pinoConfig, } from './config/pino';
+// import routes from './routes';
+import { dbInit } from './models';
+import { readingContractEvents } from './utils/blockchain';
 
 
 const init = async () => {
@@ -30,6 +33,12 @@ const init = async () => {
     await server.register([
         { plugin: Pino, options: pinoConfig(false), },
     ]);
+
+    await dbInit();
+
+    await readingContractEvents();
+
+    // server.route(routes);
 
     // Запускаем сервер
     try {
